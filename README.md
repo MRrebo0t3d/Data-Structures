@@ -1,4 +1,4 @@
-__This project repo is for implementation practice for the data structures I learn.__
+__Implementation practice of data structures.__
 
 # List of data structures:
 * BST
