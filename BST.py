@@ -1,3 +1,6 @@
+from collections import deque
+import math
+
 class Node:
     def __init__(self, data):
         self.value = data
@@ -12,32 +15,35 @@ class BinarySearchTree:
     """
     def __init__(self):
         self.root = None
-
+        self.type_of_data = type(self.root.value) if self.root else None
+        self.count = 0
     # need to implement dunder methods like:
     # __len__ : to return the height
     # __getitem__ : to print out data of tree using one of the traversal methods
 
+    def __len__(self):
+        return self.count
+
     def insert(self, value):
         # PRE: value(s) has/have passed the custom type checks for type T (tree)
         # POST: value(s) is/are added onto the BST
-        if isinstance(value, list):
-            # if provide a list of values, then iterative through list and add those values to the BST
-            pass
-        
         if self.root is None:
             self.root = Node(value)
+            self.count +=1
         else:
-            self._insert_node(root, value)
+            self._insert_node(self.root, value)
 
     def _insert_node(self, current, value):
         if value <= current.value:
             if current.left is None:
                 current.left = Node(value)
+                self.count += 1
             else:
                 return self._insert_node(current.left, value)
         else:
             if current.right is None:
                 current.right = Node(value)
+                self.count += 1
             else:
                 return self._insert_node(current.right, value)
     
@@ -88,6 +94,7 @@ class BinarySearchTree:
             # dereference the largest value so that it could be promoted
             find_parent(largest_value.value).right = None
             node_to_remove.value = largest_value.value
+        self.count -= 1
         return True
 
     def contains(self, value):
@@ -169,55 +176,68 @@ class BinarySearchTree:
             return False
         return True
 
+    def _helper_height(self, node)
+        if node is None:
+            return None
+        return max(self.height(node.left), self.height(node.right)) + 1
+
     def height(self, node):
         #if self.root is None:
         #    return None
-        
-        #if node.value == self.root.value:
-        #    return 
-        pass
+        return self._helper_height(self.root)
 
-    def depth(self, value):
-        pass
+    def levels(self):
+        print("# OF LEVELS:", math.floor(math.log2(self.count) + 1), sep=' ')
 
-    def heavy_side(self):
-        pass
     
-    # traversal strategies: pre-order, post-order, in-order
-    def _helper_traversals(self, root, mode):
+    # traversal strategies: pre-order, post-order, in-order, level order
 
-        if mode == "pre-order":
-            def _helper_pre(self, root):
-                if root is not None:
-                    print("{}".format(root.value))
-                    self._helper_pre(root.left)
-                    self._helper_pre(root.right)
-        elif mode == "post-order":
-            def _helper_post(self, root):
-                if root is not None:
-                    self._helper_post(root.left)
-                    print("{}".format(root.value))
-                    self._helper_post(root.right)
-        elif mode == "in-order":
-            def _helper_in(self, root):
-                if root is not None:
-                    self._helper_in(root.left)
-                    self._helper_in(root.right)
-                    print("{}".format(root.value))
-        else:
-            # perform level-order traversal
-            def _helper_level(self, root):
-                if root is not None:
-
-                    if root.left is not None and root.right is not None:
-                        print
-            
+    def _helper_pre(self, root):
+        if root is not None:
+            print(root.value)
+            self._helper_pre(root.left)
+            self._helper_pre(root.right)
+        
     def pre_order(self):
-        return self._helper_traversals(self.root, mode="pre-order")
+        return self._helper_pre(self.root)
+
+    def _helper_post(self,root):
+        if root is not None:
+            self._helper_post(root.left)
+            print(root.value)
+            self._helper_post(root.right)
+        
+    def post_order(self):
+        return self._helper_post(self.root)
+
+    def _helper_in(self, root):
+        if root is not None:
+            self._helper_in(root.left)
+            self._helper_in(root.right)
+            print(root.value)
 
     def in_order(self):
-        return self._helper_traversals(self.root, mode="in-order")
+        return self._helper_in(self.root) 
 
-    def post_order(self):
-        return self._helper_traversals(self.root, mode="post-order")
+    def _helper_level(self, root):
+        if root:
+            queue = deque()
+            queue.append(root)
+            while len(queue) > 0:
+                rt = queue.popleft()
+                print(rt.value)
+                if rt.left:
+                    queue.append(rt.left)
+                if rt.right:
+                    queue.append(rt.right)
+
+    def level_order(self):
+        return self._helper_level(self.root)
+
+# Test Cases:
+t1 = [4, 3 ,5, 1, 2, 9]
+
+BST = BinarySearchTree()
+for i in t1:
+    BST.insert(i)
 
